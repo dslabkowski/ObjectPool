@@ -1,0 +1,13 @@
+{
+	"RemapUnityFiles": 
+	{
+		"Module.UEObjectPooling.cpp.obj": [
+			"ObjectPool.cpp.obj",
+			"UEObjectPooling.cpp.obj"
+		],
+		"Module.UEObjectPooling.gen.cpp.obj": [
+			"ObjectPool.gen.cpp.obj",
+			"UEObjectPooling.init.gen.cpp.obj"
+		]
+	}
+}
