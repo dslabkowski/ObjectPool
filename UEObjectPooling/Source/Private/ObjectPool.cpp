@@ -11,7 +11,7 @@
 
 UObjectPool::UObjectPool()
 {
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 }
 
 
@@ -41,19 +41,28 @@ void UObjectPool::AddActorsToPool(int const ActorsNumber,
 {
 	if(PoolActor && ActorsNumber > 0)
 	{
+		FActorSpawnParameters SpawnParameters;
+		SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		for (int i = 0; i < ActorsNumber; i++)
 		{
-			AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(PoolActor, FVector().ZeroVector, FRotator().ZeroRotator);
-					SpawnedActor->SetActorHiddenInGame(true);
-					SpawnedActor->SetActorEnableCollision(false);
+			AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(PoolActor, FVector().ZeroVector, FRotator().ZeroRotator, SpawnParameters);
+			if(SpawnedActor)
+			{
+				SpawnedActor->SetActorHiddenInGame(true);
+				SpawnedActor->SetActorEnableCollision(false);
+				SpawnedActor->SetActorTickEnabled(false);
 
-			InactiveActors.Add(SpawnedActor);
+				InactiveActors.Add(SpawnedActor);
+			}
+			else
+			{
+				Branch = EOutputStates::Failed;
+				return;					
+			}
 		}
-		
 		Branch = EOutputStates::Success;
 		return;
 	}
-	
 	Branch = EOutputStates::Failed;
 	return;
 }
@@ -85,7 +94,7 @@ void UObjectPool::SpawnActorFromPool(const FTransform SpawnTransform, AActor* Ow
 				PoolActorToSpawn->SetInstigator(Instigator);
 				PoolActorToSpawn->SetActorHiddenInGame(false);
 				PoolActorToSpawn->SetActorEnableCollision(true);
-				SpawnedActor->SetActorTickEnabled(true);
+				PoolActorToSpawn->SetActorTickEnabled(true);
 
 		InactiveActors.Remove(PoolActorToSpawn);
 		ActiveActors.Add(PoolActorToSpawn);
@@ -126,7 +135,7 @@ bool UObjectPool::HasPoolFreeActor() const
 
 void UObjectPool::ReturnActorToPool(AActor* Actor)
 {
-	if(ActiveActors.Find(Actor))
+	if(ActiveActors.Contains(Actor))
 	{
 		Actor->SetActorHiddenInGame(true);
 		Actor->SetActorEnableCollision(false);
