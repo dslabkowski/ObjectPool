@@ -1,15 +1,15 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "UEObjectPooling.h"
+#include "ObjectPool.h"
 
-#define LOCTEXT_NAMESPACE "FUEObjectPoolingModule"
+#define LOCTEXT_NAMESPACE "FObjectPoolModule"
 
-void FUEObjectPoolingModule::StartupModule()
+void FObjectPoolModule::StartupModule()
 {
 	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
 }
 
-void FUEObjectPoolingModule::ShutdownModule()
+void FObjectPoolModule::ShutdownModule()
 {
 	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
 	// we call this function before unloading the module.
@@ -17,4 +17,4 @@ void FUEObjectPoolingModule::ShutdownModule()
 
 #undef LOCTEXT_NAMESPACE
 	
-IMPLEMENT_MODULE(FUEObjectPoolingModule, UEObjectPooling)
+IMPLEMENT_MODULE(FObjectPoolModule, ObjectPool)

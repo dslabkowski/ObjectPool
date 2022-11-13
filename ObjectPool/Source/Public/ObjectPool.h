@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
-class FUEObjectPoolingModule : public IModuleInterface
+class FObjectPoolModule : public IModuleInterface
 {
 public:
 

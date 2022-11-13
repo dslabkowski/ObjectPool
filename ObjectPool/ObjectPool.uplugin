@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "ObjectPool",
+	"Description": "A quick implementation of the Object Pool pattern for blueprint.",
+	"Category": "Other",
+	"CreatedBy": "Dawid Slabkowski",
+	"CreatedByURL": "https://github.com/dslabkowski",
+	"DocsURL": "https://github.com/dslabkowski/ObjectPool/wiki/Documentation",
+	"MarketplaceURL": "",
+	"SupportURL": "https://github.com/dslabkowski/ObjectPool/issues",
+	"CanContainContent": false,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "ObjectPool",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}

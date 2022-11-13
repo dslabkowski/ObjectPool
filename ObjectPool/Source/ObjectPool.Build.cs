@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class UEObjectPooling : ModuleRules
+public class ObjectPool : ModuleRules
 {
-	public UEObjectPooling(ReadOnlyTargetRules Target) : base(Target)
+	public ObjectPool(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		
