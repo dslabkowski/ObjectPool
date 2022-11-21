@@ -6,7 +6,7 @@ Object Pooling is a great way to optimize your projects and lower the burden tha
 
 
 With this plugin you can create and use object pooling straight from your blueprints, any class (inheriting from an actor) can become a pool element without any changes!
-UE4ObjectPooling Plugin is a single class in C++ that contains all needed functions exposed to blueprints. There is no need to use C++.
+ObjectPool Plugin is a single class in C++ that contains all needed functions exposed to blueprints. There is no need to use C++.
 
 Learn more about [object pooling pattern](https://gameprogrammingpatterns.com/object-pool.html).
 
