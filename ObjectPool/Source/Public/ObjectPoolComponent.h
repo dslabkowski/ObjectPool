@@ -13,8 +13,8 @@ enum EOutputStates
 	Failed		UMETA(DisplayName = "Failed"),
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FActorSpawnedFromPool, AActor*, SpawnedActor);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FActorReturnedToPool, AActor*, ReturnedActor);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FActorStateChangedDelegate, AActor*, Actor);
+
 
 UCLASS(Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class OBJECTPOOL_API UObjectPoolComponent : public UActorComponent
@@ -24,27 +24,27 @@ class OBJECTPOOL_API UObjectPoolComponent : public UActorComponent
 public:	
 	UObjectPoolComponent();
 
-	//Should pool actors be spawned on this component event begin play.
+	// Should pool actors be spawned on this component event begin play.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn="true"))
 	bool bSpawnPoolObjectsOnBeginPlay = true;
 
-	//Subclass of AActor class to use in the pool.
+	// Subclass of AActor class to use in the pool.
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (ExposeOnSpawn="true"))
-	TSubclassOf<AActor> PoolActor;
+	TSubclassOf<AActor> PoolActorClass;
 
-	//Define how big should be pool by default.
+	// Define how big should be pool by default.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn="true"))
 	int32 InitialPoolSize;
 
-	//Dispatcher. Each time an actor from the pool is spawned.
+	// Dispatcher. Each time an actor from the pool is spawned.
 	UPROPERTY(BlueprintAssignable, BlueprintReadWrite)
-	FActorSpawnedFromPool OnActorBeginSpawnedFromPool;
+	FActorStateChangedDelegate OnActorSpawnedFromPool;
 
-	//Dispatcher. Each time an actor is returned to the pool.
+	// Dispatcher. Each time an actor is returned to the pool.
 	UPROPERTY(BlueprintAssignable, BlueprintReadWrite)
-	FActorReturnedToPool OnActorReturnedToPool;
+	FActorStateChangedDelegate OnActorReturnedToPool;
 	
-	//Adds the specified number of actors to the pool.
+	// Adds the specified number of actors to the pool.
 	UFUNCTION(BlueprintCallable, Meta = (Keywords = "object pool, pool, object"))
 	void AddActorsToPool(int const ActorsNumber);
 	
@@ -56,23 +56,23 @@ public:
 	void SpawnActorFromPool(FTransform SpawnTransform, AActor* Owner, APawn* Instigator, bool SpawnActorIfPoolIsEmpty,
 							TEnumAsByte<EOutputStates>& Branch, AActor*& SpawnedActor);
 
-	//Returns whether the pool has at least one free actor.
+	// Returns whether the pool has at least one free actor.
 	UFUNCTION(BlueprintCallable, BlueprintPure, Meta = (Keywords = "object pool, pool, object"))
 	bool HasPoolFreeActor() const;
 
-	//Returns given actor back to the pool.
+	// Returns given actor back to the pool.
 	UFUNCTION(BlueprintCallable, Meta = (Keywords = "object pool, pool, object"))
 	void ReturnActorToPool(AActor* Actor);
 
-	//Returns array of active actors in the pool.
+	// Returns array of active actors in the pool.
 	UFUNCTION(BlueprintCallable, Meta = (Keywords = "object pool, pool, object"))
-	TArray<AActor*> GetActiveActorsFromPool() const;
+	TArray<AActor*> GetActiveActorsFromPool() const {return ActiveActors;}
 
-	//Return array of inactive actors in the pool.
+	// Return array of inactive actors in the pool.
 	UFUNCTION(BlueprintCallable, Meta = (Keywords = "object pool, pool, object"))
-	TArray<AActor*> GetInactiveActorsFromPool() const;
+	TArray<AActor*> GetInactiveActorsFromPool() const {return InactiveActors;}
 
-	//Return total number of actors in the pool.
+	// Return total number of actors in the pool.
 	UFUNCTION(BlueprintCallable, Meta = (Keywords = "object pool, pool, object"))
 	int32 GetPoolSize() const;
 	
@@ -91,14 +91,13 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+private:
 	UPROPERTY()
 	TArray<AActor*> ActiveActors;
 
 	UPROPERTY()
 	TArray<AActor*> InactiveActors;
 
-public:	
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-		
+	void SetPoolActorHidden(AActor* Actor, bool bNewHidden);
+	
 };
